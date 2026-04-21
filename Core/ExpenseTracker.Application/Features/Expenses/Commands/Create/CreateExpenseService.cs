@@ -1,15 +1,14 @@
-using ExpenseTracker.Application.Contracts.Persistence;
 using ExpenseTracker.Domain.Entities;
 
 namespace ExpenseTracker.Application.Features.Expenses.Commands.Create;
 
 public class CreateExpenseService
 {
-    private readonly IExpenseRepository _expenseRepository;
+    private readonly ExpenseMemoryStore _expenseMemoryStore;
 
-    public CreateExpenseService(IExpenseRepository expenseRepository)
+    public CreateExpenseService(ExpenseMemoryStore expenseMemoryStore)
     {
-        _expenseRepository = expenseRepository;
+        _expenseMemoryStore = expenseMemoryStore;
     }
 
     public Expense RegisterExpense(CreateExpenseDto expenseDto)
@@ -24,7 +23,7 @@ public class CreateExpenseService
             PaymentMethod = expenseDto.PaymentMethod
         };
 
-        _expenseRepository.Add(newExpense);
+        _expenseMemoryStore.Expenses.Add(newExpense);
 
         return newExpense;
     }

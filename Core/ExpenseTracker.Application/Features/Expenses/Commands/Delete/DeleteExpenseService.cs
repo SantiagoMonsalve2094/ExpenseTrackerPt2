@@ -1,18 +1,24 @@
-using ExpenseTracker.Application.Contracts.Persistence;
-
 namespace ExpenseTracker.Application.Features.Expenses.Commands.Delete;
 
 public class DeleteExpenseService
 {
-    private readonly IExpenseRepository _expenseRepository;
+    private readonly ExpenseMemoryStore _expenseMemoryStore;
 
-    public DeleteExpenseService(IExpenseRepository expenseRepository)
+    public DeleteExpenseService(ExpenseMemoryStore expenseMemoryStore)
     {
-        _expenseRepository = expenseRepository;
+        _expenseMemoryStore = expenseMemoryStore;
     }
 
     public bool DeleteExpense(Guid id)
     {
-        return _expenseRepository.Delete(id);
+        var existingExpense = _expenseMemoryStore.Expenses.FirstOrDefault(expense => expense.Id == id);
+
+        if (existingExpense is null)
+        {
+            return false;
+        }
+
+        _expenseMemoryStore.Expenses.Remove(existingExpense);
+        return true;
     }
 }
