@@ -1,20 +1,19 @@
-using ExpenseTracker.Application.Contracts.Persistence;
 using ExpenseTracker.Domain.Entities;
 
 namespace ExpenseTracker.Application.Features.Expenses.Commands.Update;
 
 public class UpdateExpenseService
 {
-    private readonly IExpenseRepository _expenseRepository;
+    private readonly ExpenseMemoryStore _expenseMemoryStore;
 
-    public UpdateExpenseService(IExpenseRepository expenseRepository)
+    public UpdateExpenseService(ExpenseMemoryStore expenseMemoryStore)
     {
-        _expenseRepository = expenseRepository;
+        _expenseMemoryStore = expenseMemoryStore;
     }
 
     public Expense? UpdateExpense(Guid id, UpdateExpenseDto expenseDto)
     {
-        Expense? existingExpense = _expenseRepository.GetById(id);
+        Expense? existingExpense = _expenseMemoryStore.Expenses.FirstOrDefault(expense => expense.Id == id);
 
         if (existingExpense is null)
         {
@@ -26,8 +25,6 @@ public class UpdateExpenseService
         existingExpense.Date = expenseDto.Date;
         existingExpense.Category = expenseDto.Category;
         existingExpense.PaymentMethod = expenseDto.PaymentMethod;
-
-        _expenseRepository.Update(existingExpense);
 
         return existingExpense;
     }

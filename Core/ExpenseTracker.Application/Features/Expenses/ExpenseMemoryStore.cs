@@ -1,8 +1,8 @@
 using ExpenseTracker.Domain.Entities;
 
-namespace ExpenseTracker.Infrastructure.Persistence;
+namespace ExpenseTracker.Application.Features.Expenses;
 
-public class DbContext
+public class ExpenseMemoryStore
 {
     public List<Expense> Expenses { get; } = [];
 }

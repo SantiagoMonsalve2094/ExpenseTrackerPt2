@@ -1,5 +1,6 @@
 .vs/
 bin/
 obj/
+.nuget/
 run.out.log
 run.err.log

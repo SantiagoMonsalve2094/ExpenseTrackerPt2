@@ -1,25 +1,24 @@
-using ExpenseTracker.Application.Contracts.Persistence;
 using ExpenseTracker.Domain.Entities;
 
 namespace ExpenseTracker.Application.Features.Expenses.Queries.Get;
 
 public class GetExpensesService
 {
-    private readonly IExpenseRepository _expenseRepository;
+    private readonly ExpenseMemoryStore _expenseMemoryStore;
 
-    public GetExpensesService(IExpenseRepository expenseRepository)
+    public GetExpensesService(ExpenseMemoryStore expenseMemoryStore)
     {
-        _expenseRepository = expenseRepository;
+        _expenseMemoryStore = expenseMemoryStore;
     }
 
     public IReadOnlyCollection<Expense> GetExpenses()
     {
-        return _expenseRepository.GetAll();
+        return _expenseMemoryStore.Expenses;
     }
 
     public IReadOnlyCollection<Expense> GetExpensesWithFilter(GetExpensesFilterDto filter)
     {
-        IEnumerable<Expense> expenses = _expenseRepository.GetAll();
+        IEnumerable<Expense> expenses = _expenseMemoryStore.Expenses;
 
         if (!string.IsNullOrWhiteSpace(filter.Category))
         {
@@ -43,6 +42,6 @@ public class GetExpensesService
 
     public Expense? GetExpenseById(Guid id)
     {
-        return _expenseRepository.GetById(id);
+        return _expenseMemoryStore.Expenses.FirstOrDefault(expense => expense.Id == id);
     }
 }
