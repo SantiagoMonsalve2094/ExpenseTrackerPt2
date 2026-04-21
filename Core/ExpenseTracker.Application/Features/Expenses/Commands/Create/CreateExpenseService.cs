@@ -4,11 +4,11 @@ namespace ExpenseTracker.Application.Features.Expenses.Commands.Create;
 
 public class CreateExpenseService
 {
-    private readonly ExpenseMemoryStore _expenseMemoryStore;
+    private readonly List<Expense> _expenses;
 
-    public CreateExpenseService(ExpenseMemoryStore expenseMemoryStore)
+    public CreateExpenseService(List<Expense> expenses)
     {
-        _expenseMemoryStore = expenseMemoryStore;
+        _expenses = expenses;
     }
 
     public Expense RegisterExpense(CreateExpenseDto expenseDto)
@@ -23,7 +23,7 @@ public class CreateExpenseService
             PaymentMethod = expenseDto.PaymentMethod
         };
 
-        _expenseMemoryStore.Expenses.Add(newExpense);
+        _expenses.Add(newExpense);
 
         return newExpense;
     }

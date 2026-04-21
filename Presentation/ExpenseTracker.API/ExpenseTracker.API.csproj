@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\ExpenseTracker.Infrastructure\ExpenseTracker.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Core\ExpenseTracker.Application\ExpenseTracker.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
