@@ -1,7 +1,9 @@
 using ExpenseTracker.Application.Features.Expenses.Commands.Create;
 using ExpenseTracker.Application.Features.Expenses.Commands.Delete;
 using ExpenseTracker.Application.Features.Expenses.Commands.Update;
-using ExpenseTracker.Application.Features.Expenses.Queries.Get;
+using ExpenseTracker.Application.Features.Expenses.Queries.GetAll;
+using ExpenseTracker.Application.Features.Expenses.Queries.GetById;
+using ExpenseTracker.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.API.Controllers;
@@ -10,39 +12,21 @@ namespace ExpenseTracker.API.Controllers;
 [ApiController]
 public class ExpensesController : ControllerBase
 {
-    private readonly CreateExpenseService _createExpenseService;
-    private readonly UpdateExpenseService _updateExpenseService;
-    private readonly DeleteExpenseService _deleteExpenseService;
-    private readonly GetExpensesService _getExpensesService;
-
-    public ExpensesController(
-        CreateExpenseService createExpenseService,
-        UpdateExpenseService updateExpenseService,
-        DeleteExpenseService deleteExpenseService,
-        GetExpensesService getExpensesService)
-    {
-        _createExpenseService = createExpenseService;
-        _updateExpenseService = updateExpenseService;
-        _deleteExpenseService = deleteExpenseService;
-        _getExpensesService = getExpensesService;
-    }
+    private static readonly List<Expense> _expenses = [];
 
     [HttpGet]
     public IActionResult GetExpenses()
     {
-        return Ok(_getExpensesService.GetExpenses());
-    }
+        GetAllExpensesService getAllExpensesService = new(_expenses);
 
-    [HttpGet("filter")]
-    public IActionResult GetExpensesWithFilter([FromQuery] GetExpensesFilterDto filter)
-    {
-        return Ok(_getExpensesService.GetExpensesWithFilter(filter));
+        return Ok(getAllExpensesService.GetExpenses());
     }
 
     [HttpGet("{id:guid}")]
     public IActionResult GetExpenseById(Guid id)
     {
-        var expense = _getExpensesService.GetExpenseById(id);
+        GetExpenseByIdService getExpenseByIdService = new(_expenses);
+        var expense = getExpenseByIdService.GetExpenseById(id);
 
         if (expense is null)
         {
@@ -55,7 +39,8 @@ public class ExpensesController : ControllerBase
     [HttpPost]
     public IActionResult RegisterExpense([FromBody] CreateExpenseDto expense)
     {
-        var newExpense = _createExpenseService.RegisterExpense(expense);
+        CreateExpenseService createExpenseService = new(_expenses);
+        var newExpense = createExpenseService.RegisterExpense(expense);
 
         return CreatedAtAction(nameof(GetExpenseById), new { id = newExpense.Id }, newExpense);
     }
@@ -63,7 +48,8 @@ public class ExpensesController : ControllerBase
     [HttpPut("{id:guid}")]
     public IActionResult UpdateExpense(Guid id, [FromBody] UpdateExpenseDto expense)
     {
-        var updatedExpense = _updateExpenseService.UpdateExpense(id, expense);
+        UpdateExpenseService updateExpenseService = new(_expenses);
+        var updatedExpense = updateExpenseService.UpdateExpense(id, expense);
 
         if (updatedExpense is null)
         {
@@ -76,7 +62,8 @@ public class ExpensesController : ControllerBase
     [HttpDelete("{id:guid}")]
     public IActionResult DeleteExpense(Guid id)
     {
-        var deleted = _deleteExpenseService.DeleteExpense(id);
+        DeleteExpenseService deleteExpenseService = new(_expenses);
+        var deleted = deleteExpenseService.DeleteExpense(id);
 
         if (!deleted)
         {

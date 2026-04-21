@@ -2,23 +2,23 @@ namespace ExpenseTracker.Application.Features.Expenses.Commands.Delete;
 
 public class DeleteExpenseService
 {
-    private readonly ExpenseMemoryStore _expenseMemoryStore;
+    private readonly List<ExpenseTracker.Domain.Entities.Expense> _expenses;
 
-    public DeleteExpenseService(ExpenseMemoryStore expenseMemoryStore)
+    public DeleteExpenseService(List<ExpenseTracker.Domain.Entities.Expense> expenses)
     {
-        _expenseMemoryStore = expenseMemoryStore;
+        _expenses = expenses;
     }
 
     public bool DeleteExpense(Guid id)
     {
-        var existingExpense = _expenseMemoryStore.Expenses.FirstOrDefault(expense => expense.Id == id);
+        var existingExpense = _expenses.FirstOrDefault(expense => expense.Id == id);
 
         if (existingExpense is null)
         {
             return false;
         }
 
-        _expenseMemoryStore.Expenses.Remove(existingExpense);
+        _expenses.Remove(existingExpense);
         return true;
     }
 }

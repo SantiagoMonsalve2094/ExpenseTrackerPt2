@@ -4,16 +4,16 @@ namespace ExpenseTracker.Application.Features.Expenses.Commands.Update;
 
 public class UpdateExpenseService
 {
-    private readonly ExpenseMemoryStore _expenseMemoryStore;
+    private readonly List<Expense> _expenses;
 
-    public UpdateExpenseService(ExpenseMemoryStore expenseMemoryStore)
+    public UpdateExpenseService(List<Expense> expenses)
     {
-        _expenseMemoryStore = expenseMemoryStore;
+        _expenses = expenses;
     }
 
     public Expense? UpdateExpense(Guid id, UpdateExpenseDto expenseDto)
     {
-        Expense? existingExpense = _expenseMemoryStore.Expenses.FirstOrDefault(expense => expense.Id == id);
+        Expense? existingExpense = _expenses.FirstOrDefault(expense => expense.Id == id);
 
         if (existingExpense is null)
         {
