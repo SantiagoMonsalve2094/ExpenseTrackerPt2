@@ -33,6 +33,12 @@ public class ExpensesController : ControllerBase
         return Ok(_getExpensesService.GetExpenses());
     }
 
+    [HttpGet("filter")]
+    public IActionResult GetExpensesWithFilter([FromQuery] GetExpensesFilterDto filter)
+    {
+        return Ok(_getExpensesService.GetExpensesWithFilter(filter));
+    }
+
     [HttpGet("{id:guid}")]
     public IActionResult GetExpenseById(Guid id)
     {
