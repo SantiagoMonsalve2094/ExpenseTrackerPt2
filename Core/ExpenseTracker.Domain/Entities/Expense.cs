@@ -1,6 +1,4 @@
-using System;
-
-namespace ExpenseTracker.Models;
+namespace ExpenseTracker.Domain.Entities;
 
 public class Expense
 {

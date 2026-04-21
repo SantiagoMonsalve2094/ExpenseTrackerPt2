@@ -1,8 +1,6 @@
-using System;
+namespace ExpenseTracker.Application.Features.Expenses.Commands.Update;
 
-namespace ExpenseTracker.Models.DTOs;
-
-public class ExpenseDTO
+public class UpdateExpenseDto
 {
     public string Description { get; set; } = string.Empty;
     public decimal Amount { get; set; }
